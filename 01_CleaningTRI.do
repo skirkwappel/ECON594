@@ -15,7 +15,6 @@
 //		section in the notes bellow
 
 /*  ================================  NOTES  ================================
-**# Bookmark #1
 
 + PURPSOSE:
 	
@@ -26,13 +25,13 @@
 		
 + DEPENDENCIES:
 	Do you need to run something else to run this?
-	Not in Stata
+	No
 		
 + Inputs: 
 
 		* CSV version of Popovic's YUG91 shapefile
 		* CSV of Arcgis model builder output TRI_means
-		* CSV of centriod distances
+		* CSV of centriod distances calculated from QGIS
 
 		
 + Outputs
@@ -48,13 +47,29 @@
 
 
  ==============================  TOP MATTER ==============================*/
+ 
+**************** Set arguments ****************
+macro drop _all
+clear all 
 
-import delimited "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\GIS\YUG91final.csv", clear
-save "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\YUG91.dta", replace
+**************** Project paths ****************
+local workingdir "\Users\skirk\Dropbox\AH Yugoslavia Project" 
+di "This project is in `workingdir'"
 
-import delimited "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\GIS\TRI_means.csv", clear 
+local RAW "`workingdir'\Raw"
+di "`RAW'"
 
-merge 1:1 munic using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\YUG91.dta"
+local GIS "`workingdir'\GIS"
+di "`GIS'"
+
+**************** Importing the data ****************
+
+import delimited "`GIS'\YUG91final.csv", clear
+save "`workingdir'\YUG91.dta", replace
+
+import delimited "`GIS'\TRI_means.csv", clear 
+
+merge 1:1 munic using "\YUG91.dta"
 tab name if _merge==2
 
 /* Missing observation: Cres-Losinj 
@@ -81,12 +96,12 @@ replace TRI_mean = 19.9178783113008 if name == "Belgrade"
 drop oid_ zone_code area munic id_2 _merge 
 
 
-save "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\YUG91.dta", replace
+save "\YUG91.dta", replace
 
-import delimited "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\GIS\hubdist centriods AH.csv", clear 
+import delimited "`GIS'\hubdist centriods AH.csv", clear 
 
-merge 1:1 name using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\YUG91.dta"
+merge 1:1 name using "\YUG91.dta"
 
 drop _merge
-save "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\YUG91.dta", replace
+save "\YUG91.dta", replace
 
