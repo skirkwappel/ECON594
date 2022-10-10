@@ -24,7 +24,7 @@
 		
 + Outputs
 	
-		* Table 
+		* Tables
   
   Changed:
 	*Version 1: First version, no changes to log.
@@ -34,8 +34,26 @@
 
 
  ==============================  TOP MATTER ==============================*/
+ **************** Set arguments ****************
+macro drop _all
+clear all 
 
- use "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Municipality level.dta", clear
+**************** Project paths ****************
+local workingdir "\Users\skirk\Dropbox\AH Yugoslavia Project" 
+di "This project is in `workingdir'"
+
+local RAW "`workingdir'\Raw"
+di "`RAW'"
+
+local GIS "`workingdir'\GIS"
+di "`GIS'"
+
+local Outputs "`workingdir'\Outputs"
+
+***** Importing the data ***** 
+ 
+
+ use "\Municipality level.dta", clear
 
 *** Dropping Belgrade duplicates
 drop if municipality =="Barajevo" | municipality =="Cukarina" | municipality =="Grocka" | municipality =="Lazurevac" | municipality =="Mladenovac" |municipality == "Novi Beograd" | municipality =="Obrenovac" | municipality =="Palilula" | municipality =="Rakovica" | municipality =="Sovski Venac" | municipality =="Sopot" | municipality =="Stari Grad" |municipality =="Vracar" | municipality =="Vozdovac" | municipality =="Zemun" | municipality =="Zvezdara"
@@ -59,7 +77,7 @@ eststo: reg outcome ah_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooling 
 
 eststo: reg outcome ah_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties if centriod_dist_1910 <= 25, vce(cluster municipality)
 
-esttab using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA2a.tex", title(1910 Border Different Distances) mlabel(200km 150km 100km 50km 25km) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
+esttab using "`Outputs'\TableA2a.tex", title(1910 Border Different Distances) mlabel(200km 150km 100km 50km 25km) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
 eststo clear
 
 
@@ -75,7 +93,7 @@ eststo: reg outcome nobos_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooli
 
 eststo: reg outcome nobos_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties if centriod_dist_nobos <= 25, vce(cluster municipality)
 
-esttab using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA2b.tex", title(Old Border Different Distances) mlabel(200km 150km 100km 50km 25km) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
+esttab using "`Outputs'\TableA2b.tex", title(Old Border Different Distances) mlabel(200km 150km 100km 50km 25km) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
 eststo clear
 
 
@@ -98,7 +116,7 @@ estimates store m34, title(50km)
 xi: rdrobust outcome RV, kernel(tri) covs(TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) h(25) vce(cluster munic_fact) all 
 estimates store m35, title(25km)
 
-esttab m31 m32 m33 m34 m35 using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA2f.tex", title(1910 Border: Regression Discontinuity) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
+esttab m31 m32 m33 m34 m35 using "`Outputs'\TableA2f.tex", title(1910 Border: Regression Discontinuity) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
 eststo clear
 
 
@@ -118,7 +136,7 @@ estimates store m44, title(50km)
 xi: rdrobust outcome RV_2, kernel(tri) covs(TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) h(25) vce(cluster munic_fact) all 
 estimates store m45, title(25km)
 
-esttab m41 m42 m43 m44 m45 using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA2g.tex", title(1910 Border: Regression Discontinuity) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
+esttab m41 m42 m43 m44 m45 using "`Outputs'\TableA2g.tex", title(1910 Border: Regression Discontinuity) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
 eststo clear
 
 
@@ -138,7 +156,7 @@ eststo: reg outcome ah_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooling 
 
 eststo: reg outcome ah_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties D_200 if centriod_dist_1910 <= 25, vce(cluster municipality)
 
-esttab using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA2c.tex", title(1910 Border Different Distances) mlabel(200km 150km 100km 50km 25km) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
+esttab using "`Outputs'\TableA2c.tex", title(1910 Border Different Distances) mlabel(200km 150km 100km 50km 25km) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
 eststo clear
 
 * ==== No BiH Border ==== * 
@@ -153,5 +171,5 @@ eststo: reg outcome nobos_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooli
 
 eststo: reg outcome nobos_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties D_200 if centriod_dist_nobos <= 25, vce(cluster municipality)
 
-esttab using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA2d.tex", title(Old Border Different Distances) mlabel(200km 150km 100km 50km 25km) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
+esttab using "`Outputs'\TableA2d.tex", title(Old Border Different Distances) mlabel(200km 150km 100km 50km 25km) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
 eststo clear

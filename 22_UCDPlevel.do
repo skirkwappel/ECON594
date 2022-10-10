@@ -36,14 +36,32 @@
 
 
  ==============================  TOP MATTER ==============================*/
+ **************** Set arguments ****************
+macro drop _all
+clear all 
 
-import delimited "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\gedevents-2022-05-14.csv", bindquote(strict) clear
+**************** Project paths ****************
+local workingdir "\Users\skirk\Dropbox\AH Yugoslavia Project" 
+di "This project is in `workingdir'"
+
+local RAW "`workingdir'\Raw"
+di "`RAW'"
+
+local GIS "`workingdir'\GIS"
+di "`GIS'"
+
+local Outputs "`workingdir'\Outputs"
+
+***** Importing the data ***** 
+ 
+
+import delimited "`RAW'\gedevents-2022-05-14.csv", bindquote(strict) clear
 
 replace municipality = "Belgrade" if municipality =="Barajevo" | municipality =="Cukarina" | municipality =="Grocka" | municipality =="Lazurevac" | municipality =="Mladenovac" |municipality == "Novi Beograd" | municipality =="Obrenovac" | municipality =="Palilula" | municipality =="Rakovica" | municipality =="Sovski Venac" | municipality =="Sopot" | municipality =="Stari Grad" |municipality =="Vracar" | municipality =="Vozdovac" | municipality =="Zemun" | municipality =="Zvezdara"
  
-merge m:1 municipality using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Censuscasualties.dta"
+merge m:1 municipality using "\Censuscasualties.dta"
  
-save "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Conflict_munic.dta", replace
+save "\Conflict_munic.dta", replace
  
 **** Creating the running variables ****
 
@@ -75,7 +93,7 @@ estimates store mA63, title((3))
 xi: rdrobust best_est RV_UCDP, h(250) kernel(tri) covs(TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) vce(cluster munic_fact) all
 estimates store mA64, title((4))
  
- esttab mA61 mA62 mA63 mA64 using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA6a.tex", title(1910: Conflict Level) mlabel((1) (2) (3) (4)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
+ esttab mA61 mA62 mA63 mA64 using "`Outputs'\TableA6a.tex", title(1910: Conflict Level) mlabel((1) (2) (3) (4)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
 eststo clear
  
  
@@ -92,5 +110,5 @@ estimates store mA63b, title((3))
 xi: rdrobust best_est RV_UCDP_2, h(250) kernel(tri) covs(TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) vce(cluster munic_fact) all
 estimates store mA64b, title((4))
 
- esttab mA61b mA62b mA63b mA64b using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA6b.tex", title(1867: Conflict Level) mlabel((1) (2) (3) (4)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
+ esttab mA61b mA62b mA63b mA64b using "`Outputs'\TableA6b.tex", title(1867: Conflict Level) mlabel((1) (2) (3) (4)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
 eststo clear

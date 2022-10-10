@@ -37,8 +37,26 @@
 
 
  ==============================  TOP MATTER ==============================*/
+
+**************** Set arguments ****************
+macro drop _all
+clear all 
+
+**************** Project paths ****************
+local workingdir "\Users\skirk\Dropbox\AH Yugoslavia Project" 
+di "This project is in `workingdir'"
+
+local RAW "`workingdir'\Raw"
+di "`RAW'"
+
+local GIS "`workingdir'\GIS"
+di "`GIS'"
+
+local Outputs "`workingdir'\Outputs"
+
+***** Importing the data ***** 
  
- use "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Municipality level.dta", clear
+ use "\Municipality level.dta", clear
 
 *** Dropping Belgrade duplicates
 drop if municipality =="Barajevo" | municipality =="Cukarina" | municipality =="Grocka" | municipality =="Lazurevac" | municipality =="Mladenovac" |municipality == "Novi Beograd" | municipality =="Obrenovac" | municipality =="Palilula" | municipality =="Rakovica" | municipality =="Sovski Venac" | municipality =="Sopot" | municipality =="Stari Grad" |municipality =="Vracar" | municipality =="Vozdovac" | municipality =="Zemun" | municipality =="Zvezdara"
@@ -56,7 +74,7 @@ eststo: reg outcome ah_indic TRI_mean ethnic_polar if centriod_dist_1910 < 250, 
 
 eststo: reg outcome ah_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties if centriod_dist_1910 < 250, vce(cluster municipality)
 
-esttab using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Table1a.tex", title(1910 Border: Border Specification) mlabel((1) (2) (3) (4) (5)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) indicate("Country FE =*.country") drop(_cons) se label page(dcolumn) nonumber r2
+esttab using "`Outputs'\Table1a.tex", title(1910 Border: Border Specification) mlabel((1) (2) (3) (4) (5)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) indicate("Country FE =*.country") drop(_cons) se label page(dcolumn) nonumber r2
 eststo clear
 
 * ========== RD Specification ========== *
@@ -83,7 +101,7 @@ estimates store m13, title((4))
 xi: rdrobust outcome RV, kernel(tri) covs(TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) vce(cluster munic_fact) all 
 estimates store m14, title((5))
 
-esttab m10 m11 m12 m13 m14 using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Table1b.tex", title(1910 Border: Regression Discontinuity) mlabel((1) (2) (3) (4) (5)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber r2
+esttab m10 m11 m12 m13 m14 using "`Outputs'\Table1b.tex", title(1910 Border: Regression Discontinuity) mlabel((1) (2) (3) (4) (5)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber r2
 eststo clear
 
 * === No BiH Border === *
@@ -99,7 +117,7 @@ eststo: reg outcome nobos_indic TRI_mean ethnic_polar if centriod_dist_nobos < 2
 
 eststo: reg outcome nobos_indic TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties if centriod_dist_nobos < 250, vce(cluster municipality)
 
-esttab using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Table2a.tex", title(Old Border: Border Specification) mlabel((1) (2) (3) (4) (5)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) indicate("Country FE =*.country") drop(_cons) se label page(dcolumn) nonumber r2
+esttab using "`Outputs'\Table2a.tex", title(Old Border: Border Specification) mlabel((1) (2) (3) (4) (5)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) indicate("Country FE =*.country") drop(_cons) se label page(dcolumn) nonumber r2
 eststo clear
 
 * ========== RD Specification ========== *
@@ -122,5 +140,5 @@ estimates store m23, title((4))
 xi: rdrobust outcome RV_2, kernel(tri) covs(TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) vce(cluster munic_fact) all
 estimates store m24, title((5))
 
-esttab m20 m21 m22 m23 m24 using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Table2b.tex", title(Old Border: Regression Discontinuity) mlabel((1) (2) (3) (4) (5)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber r2
+esttab m20 m21 m22 m23 m24 using "`Outputs'\Table2b.tex", title(Old Border: Regression Discontinuity) mlabel((1) (2) (3) (4) (5)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber r2
 eststo clear

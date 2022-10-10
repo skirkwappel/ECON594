@@ -1,6 +1,6 @@
 ********************************************************************************
 *																			   *
-*								Title: 1_Merges.do		 	 		   *
+*								Title: 03_Cleaning_WWII		 	 		   *
 *																			   *
 ********************************************************************************
 
@@ -27,6 +27,7 @@
 + Inputs: 
 
 		* YUG91 shapefile as csv
+		* WWII Casualties data
 
 		
 + Outputs
@@ -41,7 +42,22 @@
 
  ==============================  TOP MATTER ==============================*/
  
-import excel "C:\Users\skirk\Downloads\casualties by municipality.xlsx", sheet("Sheet1") firstrow clear
+macro drop _all
+clear all 
+
+**************** Project paths ****************
+local workingdir "\Users\skirk\Dropbox\AH Yugoslavia Project" 
+di "This project is in `workingdir'"
+
+local RAW "`workingdir'\Raw"
+di "`RAW'"
+
+local GIS "`workingdir'\GIS"
+di "`GIS'"
+
+*********************************************
+ 
+import excel "`RAW'\casualties by municipality.xlsx", sheet("Sheet1") firstrow clear
 replace Total = 0 if Total==.
 replace Serbs = 0 if Serbs==.
 replace Croats = 0 if Croats==.
@@ -67,14 +83,14 @@ replace municipality = "Svilajnac" if municipality == "Svilanjac"
 replace municipality = "Varazdin" if municipality == "Varadzin"
 replace municipality = "Veles" if municipality == "Titov Veles"
 replace municipality = "Vozdovac" if municipality == "Vodzovac"
-save "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Casualties.dta", replace
+save "\Casualties.dta", replace
 
-use "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Census.dta"
+use "\Census.dta"
 
-merge 1:1 municipality using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Casualties.dta"
+merge 1:1 municipality using "\Casualties.dta"
 
 drop if _merge==2 
 drop _merge
 
-save "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Censuscasualties.dta", replace
+save "\Censuscasualties.dta", replace
 

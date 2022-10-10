@@ -1,4 +1,4 @@
-*\ 20 Falsification: Dropping Extreme events? 
+*\ 20 Falsification: Dropping Extreme events
 
 *Version: 1 
 
@@ -24,7 +24,7 @@
 		
 + Outputs
 	
-		* Table 
+		* Tables --> GRAVEYARD
   
   Changed:
 	*Version 1: First version, no changes to log.
@@ -32,7 +32,25 @@
 
 
  ==============================  TOP MATTER ==============================*/
- use "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Municipality level.dta", clear
+ **************** Set arguments ****************
+macro drop _all
+clear all 
+
+**************** Project paths ****************
+local workingdir "\Users\skirk\Dropbox\AH Yugoslavia Project" 
+di "This project is in `workingdir'"
+
+local RAW "`workingdir'\Raw"
+di "`RAW'"
+
+local GIS "`workingdir'\GIS"
+di "`GIS'"
+
+local Outputs "`workingdir'\Outputs"
+
+***** Importing the data ***** 
+ 
+ use "\Municipality level.dta", clear
 
 *** Dropping Belgrade duplicates
 drop if municipality =="Barajevo" | municipality =="Cukarina" | municipality =="Grocka" | municipality =="Lazurevac" | municipality =="Mladenovac" |municipality == "Novi Beograd" | municipality =="Obrenovac" | municipality =="Palilula" | municipality =="Rakovica" | municipality =="Sovski Venac" | municipality =="Sopot" | municipality =="Stari Grad" |municipality =="Vracar" | municipality =="Vozdovac" | municipality =="Zemun" | municipality =="Zvezdara"

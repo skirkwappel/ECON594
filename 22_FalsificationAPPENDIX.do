@@ -1,100 +1,3 @@
-*\ 20 Results Appendix 
-
-*Version: 1 
-
-*Last Modified: 07/26
-//		by: Sarah Wappel	
-//		Make sure to log the changes you made to the do-file on the "changes"
-//		section in the notes bellow
-
-/*  ================================  NOTES  ================================
-
-+ PURPSOSE:
-	
-	Appendix material 
-		
-+ DEPENDENCIES:
-	Do you need to run something else to run this?
-	All previous files
-		
-+ Inputs: 
-
-		* Municipality level.dta
-
-		
-+ Outputs
-	
-		* McCrary Density Tests 
-		* Appendix Table 6
-  
-  Changed:
-	*Version 1: First version, no changes to log.
-	*07/20 Created Pseudo-Borders and  created table
-	*07/26: RD PB + Relevant table added 
-	
-
-
- ==============================  TOP MATTER ==============================*/
- 
- 
- ****** McCrary Density *******
- *rddensity RV, c(0) plot
- 
- *rddensity RV_2, c(0) plot
- 
- 
- ****** Summary Statistics ********
- 
-
- 
-*\ 20 Results Appendix 
-
-*Version: 1 
-
-*Last Modified: 07/20
-//		by: Sarah Wappel	
-//		Make sure to log the changes you made to the do-file on the "changes"
-//		section in the notes bellow
-
-/*  ================================  NOTES  ================================
-
-+ PURPSOSE:
-	
-	Appendix material 
-		
-+ DEPENDENCIES:
-	Do you need to run something else to run this?
-	All previous files
-		
-+ Inputs: 
-
-		* Municipality level.dta
-
-		
-+ Outputs
-	
-		* McCrary Density Tests 
-		* Appendix Table 6
-  
-  Changed:
-	*Version 1: First version, no changes to log.
-	*07/20 Created Pseudo-Borders and  created table
-	
-
-
- ==============================  TOP MATTER ==============================*/
- 
- 
- ****** McCrary Density *******
- *rddensity RV, c(0) plot
- 
- *rddensity RV_2, c(0) plot
- 
- 
- ****** Summary Statistics ********
- 
-
- 
  ****** Pseudo- Borders *******
 *\ 20 Results Appendix 
 
@@ -132,20 +35,37 @@
 
 
  ==============================  TOP MATTER ==============================*/
+ **************** Set arguments ****************
+macro drop _all
+clear all 
+
+**************** Project paths ****************
+local workingdir "\Users\skirk\Dropbox\AH Yugoslavia Project" 
+di "This project is in `workingdir'"
+
+local RAW "`workingdir'\Raw"
+di "`RAW'"
+
+local GIS "`workingdir'\GIS"
+di "`GIS'"
+
+local Outputs "`workingdir'\Outputs"
+
+***** Importing the data ***** 
  
  
  ****** McCrary Density *******
- *rddensity RV, c(0) plot
+rddensity RV, c(0) plot
  
- *rddensity RV_2, c(0) plot
+rddensity RV_2, c(0) plot
  
  
  ****** Summary Statistics ********
- 
+ *Done by hand, since esttab is incapable of outputting something worth using
 
  
  ****** Pseudo- Borders *******
- use "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Municipality level.dta", clear
+ use "\Municipality level.dta", clear
 
 *** Dropping Belgrade duplicates
 drop if municipality =="Barajevo" | municipality =="Cukarina" | municipality =="Grocka" | municipality =="Lazurevac" | municipality =="Mladenovac" |municipality == "Novi Beograd" | municipality =="Obrenovac" | municipality =="Palilula" | municipality =="Rakovica" | municipality =="Sovski Venac" | municipality =="Sopot" | municipality =="Stari Grad" |municipality =="Vracar" | municipality =="Vozdovac" | municipality =="Zemun" | municipality =="Zvezdara"
@@ -195,7 +115,7 @@ eststo: reg outcome nobos_indic_PB_neg TRI_mean ethnic_polar if dist_PB_nobos_ne
 
 eststo: reg outcome nobos_indic_PB_neg TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties if dist_PB_nobos_neg < 250, vce(cluster municipality)
 
-esttab using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA7a.tex", title(Pseudo-Borders) mlabel((1) (2) (3) (4) (5) (6) (7) (8)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
+esttab using "`Outputs'\TableA7a.tex", title(Pseudo-Borders) mlabel((1) (2) (3) (4) (5) (6) (7) (8)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
 eststo clear
 
 
@@ -219,7 +139,7 @@ eststo: reg outcome nobos_indic_PB_pos TRI_mean ethnic_polar if dist_PB_nobos_po
 
 eststo: reg outcome nobos_indic_PB_pos TRI_mean ethnic_polar gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties if dist_PB_nobos_pos < 250, vce(cluster municipality)
 
- esttab using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA7b.tex", title(Falsification Panel B) mlabel((1) (2) (3) (4) (5) (6) (7) (8)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
+ esttab using "`Outputs'\TableA7b.tex", title(Falsification Panel B) mlabel((1) (2) (3) (4) (5) (6) (7) (8)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) drop(_cons gdp_pc soc_lab jna schooling pop_density capacity ww2_casualties) se label page(dcolumn) nonumber r2
 eststo clear
 
 * ===== Pseudo-Borders: Regression Discontinuity ===== *
@@ -262,7 +182,7 @@ xi: rdrobust outcome RV_PB_neg, kernel(tri) covs(TRI_mean ethnic_polar gdp_pc so
 estimates store mA78, title((8))
 
 
-esttab mA71 mA72 mA73 mA74 mA75 mA76 mA77 mA78 using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA8a.tex", title(Pseudo-Border 1910: Regression Discontinuity) mlabel((1) (2) (3) (4) (5) (6) (7) (8)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
+esttab mA71 mA72 mA73 mA74 mA75 mA76 mA77 mA78 using "`Outputs'\TableA8a.tex", title(Pseudo-Border 1910: Regression Discontinuity) mlabel((1) (2) (3) (4) (5) (6) (7) (8)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
 eststo clear
 
 
@@ -295,7 +215,7 @@ estimates store mA88, title((8))
 
 
 
-esttab mA81 mA82 mA83 mA84 mA85 mA86 mA87 mA88 using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\TableA8b.tex", title(Pseudo-Border 1867: Regression Discontinuity) mlabel((1) (2) (3) (4) (5) (6) (7) (8)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
+esttab mA81 mA82 mA83 mA84 mA85 mA86 mA87 mA88 using "`Outputs'\TableA8b.tex", title(Pseudo-Border 1867: Regression Discontinuity) mlabel((1) (2) (3) (4) (5) (6) (7) (8)) addnote("Standard errors are clustered by municipality") star(* 0.10 ** 0.05 *** 0.01) se label page(dcolumn) nonumber
 eststo clear
 
 

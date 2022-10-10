@@ -36,8 +36,23 @@
 
 
  ==============================  TOP MATTER ==============================*/
+ 
+ macro drop _all
+clear all 
 
-import excel "C:\Users\skirk\Documents\2021-2022 Masters\531- History\Paper\Census.xlsx", sheet("Apended") firstrow clear
+**************** Project paths ****************
+local workingdir "\Users\skirk\Dropbox\AH Yugoslavia Project" 
+di "This project is in `workingdir'"
+
+local RAW "`workingdir'\Raw"
+di "`RAW'"
+
+local GIS "`workingdir'\GIS"
+di "`GIS'"
+
+*********************************************
+
+import excel "`RAW'\Census.xlsx", sheet("Apended") firstrow clear
 
 rename municipality name
 
@@ -49,9 +64,9 @@ gen kosovo = 0
 replace kosovo = 1 if missing(jna)
 
 
-save "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Census.dta", replace
+save "\Census.dta", replace
 
-merge 1:1 name using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\YUG91.dta"
+merge 1:1 name using "\YUG91.dta"
 
 
 gen macedonia = 0
@@ -69,4 +84,4 @@ drop _merge
 gen pop_dens_arc = 0
 replace pop_dens_arc = population / sqkm
 
-save "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Census.dta", replace
+save "\Census.dta", replace

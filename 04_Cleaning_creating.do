@@ -1,6 +1,6 @@
 ********************************************************************************
 *																			   *
-*								Title: 2_MainEstimation.do		 	 		   *
+*							Title: 04_Cleaning_creating.do		 			   *
 *																			   *
 ********************************************************************************
 
@@ -41,7 +41,22 @@
 
  ==============================  TOP MATTER ==============================*/
 
-import delimited "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\gedevents-2022-05-14.csv", bindquote(strict) clear
+macro drop _all
+clear all 
+
+**************** Project paths ****************
+local workingdir "\Users\skirk\Dropbox\AH Yugoslavia Project" 
+di "This project is in `workingdir'"
+
+local RAW "`workingdir'\Raw"
+di "`RAW'"
+
+local GIS "`workingdir'\GIS"
+di "`GIS'"
+
+*********************************************
+
+import delimited "`RAW'\gedevents-2022-05-14.csv", bindquote(strict) clear
 
 replace municipality = "Belgrade" if municipality =="Barajevo" | municipality =="Cukarina" | municipality =="Grocka" | municipality =="Lazurevac" | municipality =="Mladenovac" |municipality == "Novi Beograd" | municipality =="Obrenovac" | municipality =="Palilula" | municipality =="Rakovica" | municipality =="Sovski Venac" | municipality =="Sopot" | municipality =="Stari Grad" |municipality =="Vracar" | municipality =="Vozdovac" | municipality =="Zemun" | municipality =="Zvezdara"
  
@@ -53,7 +68,7 @@ egen sum_conflict= total(c), by(municipality)
 
 collapse (max) ah_indic nobos_indic sum_conflict_type_1 sum_conflict_type_2 sum_conflict_type_3 sum_conflict, by(municipality)
 
-merge 1:1 municipality using "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Censuscasualties.dta"
+merge 1:1 municipality using "\Censuscasualties.dta"
 
 *ARC import glitch
 drop if _merge == 1
@@ -162,4 +177,4 @@ replace outcome_3 = 0 if macedonia == 1
 label variable outcome_3 "One-Sided Violence"
 
 
-save "C:\Users\skirk\Documents\2021-2022 Masters\594\Paper\Municipality level.dta", replace
+save "\Municipality level.dta", replace
