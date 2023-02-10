@@ -47,5 +47,5 @@ Import the shapefile of the 1991 Yugoslav municipalities YUG_91.shp from [Milos 
 2.  Run a quick Calculate Geometry Attributes on YUG_91.shp to get sqkm of each municipality
 3.  Import YUG_91 as a table and name it trivals
 4.  Run Model.py and export results
-   * Make sure to change to appropraite working directories in this file
+   * Make sure to change to appropriate working directories in this file
 5. Export results as YUG91final.csv into the raw folder
